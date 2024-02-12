@@ -1,11 +1,11 @@
 # dev-davidchang-api
 RESTful API for interacting with David Chang programmatically
 
-## Build & Run
+## Build & run locally (http://localhost:80)
 ### Build
 `$ docker build -t dev-davidchang-api .`
 ### Run
-`$ docker run -p 8080:8080 -it --rm --name dev-dc-api dev-davidchang-api`
+`$ docker run -p 8080:80 -it --rm --name dev-dc-api dev-davidchang-api`
 
 ## API Design (https://api.davidchang.dev)
 >[!NOTE]

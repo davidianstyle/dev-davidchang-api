@@ -22,6 +22,8 @@ var resumes = []resume{
 
 func main() {
 	router := gin.Default()
+	// For anyone trying to access https://api.davidchang.dev directly, it's likely it's a person looking for documentation.
+	// Redirect to https://docs.davidchang.dev for documentation.
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "https://docs.davidchang.dev")
 	})

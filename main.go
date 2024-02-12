@@ -24,6 +24,22 @@ func getResumes(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, resumes)
 }
 
+// getResumeByID locates the resume whose ID value matches the id
+// parameter sent by the client, then returns that resume as a response.
+func getResumeByID(c *gin.Context) {
+	id := c.Param("id")
+
+	// Loop over the list of resumes, looking for
+	// an resume whose ID value matches the parameter.
+	for _, a := range resumes {
+		if a.ID == id {
+			c.IndentedJSON(http.StatusOK, a)
+			return
+		}
+	}
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "resume not found"})
+}
+
 // postResumes adds an resume from JSON received in the request body
 func postResumes(c *gin.Context) {
 	var newResume resume
@@ -48,6 +64,7 @@ func main() {
 
 	// API to interact with resumes
 	router.GET("/resumes", getResumes)
+	router.GET("/resumes/:id", getResumeByID)
 	router.POST("/resumes", postResumes)
 
 	router.Run(":8080")

@@ -1,15 +1,15 @@
 package main
 
 import (
-	"net/http"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // resume struct represents data about a resume
 type resume struct {
-	ID	string	`json:"id"`
-	Year	int	`json:"year"`
-	URL	string	`json:"URL"`
+	ID   string `json:"id"`
+	Year int    `json:"year"`
+	URL  string `json:"URL"`
 }
 
 // resume slice to seed resume data

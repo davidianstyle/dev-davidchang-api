@@ -1,21 +1,34 @@
 openapi: 3.1.0
 info:
-  title: David Chang's RESTful API
+  title: David Chang API
   description: Programmatic way of interacting with me
   version: 0.0.1
+  summary: ''
+  contact:
+    name: David Chang
+    url: 'https://davidchang.dev'
+    email: email@davidchang.dev
+  termsOfService: ''
+  license:
+    name: The MIT License
+    url: 'https://opensource.org/license/mit/'
 servers:
-  - url: http://api.davidchang.dev
+  - url: 'https://api.davidchang.dev'
     description: Production
 paths:
   /:
     get:
-      summary: Redirect to documentation
+      operationId: redirect
+      summary: ''
+      description: Redirect to documentation
       responses:
         '301':
           description: Redirect
   /resumes:
     get:
-      summary: Get all resumes
+      operationId: getResumes
+      summary: ''
+      description: Get all resumes
       responses:
         '200':
           description: Successful response
@@ -24,7 +37,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResumesResponse'
     post:
-      summary: Add a new resume
+      operationId: addResume
+      summary: ''
+      description: Add a new resume
       requestBody:
         required: true
         content:
@@ -38,11 +53,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResumeResponse'
-  /resumes/{id}:
+  '/resumes/{id}':
     get:
-      summary: Get resume by ID
+      operationId: getResumeById
+      summary: ''
+      description: Get resume by ID
       parameters:
         - name: id
+          description: Autoincremented value uniquely identifying the resume
           in: path
           required: true
           schema:
@@ -94,3 +112,6 @@ components:
       properties:
         message:
           type: string
+tags:
+  - name: resume
+    description: Resume data

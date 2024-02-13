@@ -1,0 +1,96 @@
+openapi: 3.1.0
+info:
+  title: David Chang's RESTful API
+  description: Programmatic way of interacting with me
+  version: 0.0.1
+servers:
+  - url: http://api.davidchang.dev
+    description: Production
+paths:
+  /:
+    get:
+      summary: Redirect to documentation
+      responses:
+        '301':
+          description: Redirect
+  /resumes:
+    get:
+      summary: Get all resumes
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResumesResponse'
+    post:
+      summary: Add a new resume
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResumeRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResumeResponse'
+  /resumes/{id}:
+    get:
+      summary: Get resume by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResumeResponse'
+        '404':
+          description: Resume not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Resume:
+      type: object
+      properties:
+        id:
+          type: string
+        year:
+          type: integer
+        URL:
+          type: string
+    ResumeRequest:
+      type: object
+      properties:
+        year:
+          type: integer
+        URL:
+          type: string
+    ResumeResponse:
+      allOf:
+        - $ref: '#/components/schemas/Resume'
+        - type: object
+          properties:
+            id:
+              type: string
+    ResumesResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Resume'
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string

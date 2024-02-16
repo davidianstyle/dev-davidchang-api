@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: David Chang API
-  description: Programmatic way of interacting with me
+  description: Programmatic way of interacting with me!
   version: 0.0.1
   summary: ''
   contact:
@@ -16,14 +16,6 @@ servers:
   - url: 'https://api.davidchang.dev'
     description: Production
 paths:
-  /:
-    get:
-      operationId: redirect
-      summary: ''
-      description: Redirect to documentation
-      responses:
-        '301':
-          description: Redirect
   /resumes:
     get:
       operationId: getResumes

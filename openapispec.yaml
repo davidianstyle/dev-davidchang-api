@@ -3,7 +3,7 @@ info:
   title: David Chang API
   summary: Programmatic way of interacting with me!
   description: Programmatic way of interacting with me!
-  version: 0.0.2
+  version: 0.0.3
   contact:
     name: David Chang
     url: 'https://davidchang.dev'
@@ -139,5 +139,5 @@ components:
         - code
         - message
 tags:
-  - name: resume
+  - name: resumes
     description: Resume data

@@ -8,7 +8,7 @@ info:
     name: David Chang
     url: 'https://davidchang.dev'
     email: email@davidchang.dev
-  termsOfService: ''
+  termsOfService: 'https://davidchang.dev/'
   license:
     name: The MIT License
     url: 'https://opensource.org/license/mit/'
@@ -19,8 +19,8 @@ paths:
   /resumes:
     get:
       operationId: getResumes
-      summary: Get all resumes.
-      description: Get all resumes
+      summary: Get all resumés
+      description: Simple API that returns a JSON array of all available resumés
       tags:
         - resumes
       responses:
@@ -38,8 +38,8 @@ paths:
                 $ref: '#/components/schemas/Error'
     post:
       operationId: addResume
-      summary: Add a new resume.
-      description: Add a new resume
+      summary: Add new resumé
+      description: Simple API to add a new resumé to the database
       tags:
         - resumes
       requestBody:
@@ -64,13 +64,13 @@ paths:
   '/resumes/{id}':
     get:
       operationId: getResumeById
-      summary: Get resume by ID.
+      summary: Get resumé by ID
+      description: Simple API to get a single resumé by ID
       tags:
         - resumes
-      description: Get resume by ID
       parameters:
         - name: id
-          description: Autoincremented value uniquely identifying the resume
+          description: Autoincremented value uniquely identifying the resumé
           in: path
           required: true
           schema:
@@ -83,7 +83,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResumeResponse'
         '404':
-          description: Resume not found
+          description: Resumé not found
           content:
             application/json:
               schema:
@@ -139,5 +139,7 @@ components:
         - code
         - message
 tags:
+  - name: documentation
+    description: Documentation for api.davidchang.dev
   - name: resumes
-    description: Resume data
+    description: Resumé data

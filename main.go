@@ -43,7 +43,7 @@ func main() {
 	// API to interact with resumés
 	router.GET("/resumes", getResumes)
 	router.GET("/resumes/:id", getResumeByID)
-	router.PATCH("/resumes/:id", updateResume)
+	router.PATCH("/resumes/:id", updateResumeByID)
 	router.POST("/resumes", postResumes)
 
 	router.Run(":8080")

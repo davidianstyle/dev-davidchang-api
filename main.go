@@ -1,71 +1,119 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"fmt"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"log"
 	"net/http"
+	"os"
+	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
-// resume struct represents data about a resume
-type resume struct {
-	ID   string `json:"id"`
-	Year int    `json:"year"`
-	URL  string `json:"URL"`
+var db *gorm.DB
+
+// Resume struct represents data about a resumé
+type Resume struct {
+	gorm.Model        // Handles ID
+	Year       int    `json:"year"`
+	URL        string `json:"URL"`
 }
 
-// resume slice to seed resume data
-var resumes = []resume{
-	{ID: "1", Year: 2019, URL: "https://docs.google.com/document/d/1tiFMVTbrzlbHnxUusnT8veVlejbiZpts0dHW1GlJGf8/edit?usp=drive_link"},
-	{ID: "2", Year: 2021, URL: "https://docs.google.com/document/d/1RQd595CTc8MBs6GSLChokZXpfXnN4eS-P4KCB0qpazo/edit?usp=drive_link"},
-	{ID: "3", Year: 2023, URL: "https://docs.google.com/document/d/1RQd595CTc8MBs6GSLChokZXpfXnN4eS-P4KCB0qpazo/edit?usp=drive_link"},
-}
-
-// getResumes responds with the list of all resumes as JSON
-func getResumes(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, resumes)
-}
-
-// getResumeByID locates the resume whose ID value matches the id
-// parameter sent by the client, then returns that resume as a response.
-func getResumeByID(c *gin.Context) {
-	id := c.Param("id")
-
-	// Loop over the list of resumes, looking for
-	// an resume whose ID value matches the parameter.
-	for _, a := range resumes {
-		if a.ID == id {
-			c.IndentedJSON(http.StatusOK, a)
-			return
-		}
-	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "resume not found"})
-}
-
-// postResumes adds an resume from JSON received in the request body
-func postResumes(c *gin.Context) {
-	var newResume resume
-
-	// Call BindJSON to bind the received JSON to newResume
-	if err := c.BindJSON(&newResume); err != nil {
-		return
-	}
-
-	// Add the new resume to the slice
-	resumes = append(resumes, newResume)
-	c.IndentedJSON(http.StatusCreated, newResume)
+func init() {
+	// Load environment variables from a file if needed
+	// For simplicity, you can set them directly in your Cloud Run service configuration.
+	// LoadEnvFromFile(".env") // Uncomment this line if you are using a .env file
 }
 
 func main() {
+	// Initialize the database
+	if err := setupDB(); err != nil {
+		log.Fatalf("Error setting up the database: %v", err)
+	}
+
 	router := gin.Default()
-	// For anyone trying to access https://api.davidchang.dev directly, it's likely it's a person looking for documentation
-	// Redirect to https://docs.davidchang.dev for documentation
+
+	// Redirect to documentation if requesting https://api.davidchang.dev/ directly
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "https://docs.davidchang.dev")
 	})
 
-	// API to interact with resumes
+	// API to interact with resumés
 	router.GET("/resumes", getResumes)
 	router.GET("/resumes/:id", getResumeByID)
 	router.POST("/resumes", postResumes)
 
 	router.Run(":8080")
+}
+
+func setupDB() {
+	connectionString := os.Getenv("DB_CONNECTION_STRING")
+
+	if connectionString == "" {
+		// Get Cloud SQL connection details from environment variables if connectionString is not set
+		dbName := os.Getenv("DB_NAME")
+		dbUser := os.Getenv("DB_USER")
+		dbPassword := os.Getenv("DB_PASSWORD")
+		dbConnectionName := os.Getenv("DB_CONNECTION_NAME")
+
+		connectionString = fmt.Sprintf("%s:%s@unix(/cloudsql/%s)/%s?charset=utf8&parseTime=True&loc=Local",
+			dbUser, dbPassword, dbConnectionName, dbName)
+	}
+	// Open a database connection
+	database, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{})
+	if err != nil {
+		return fmt.Errorf("failed to connect to database: %v", err)
+	}
+
+	// Auto Migrate the resumé model, Resume
+	if err := database.AutoMigrate(&Resume{}); err != nil {
+		return fmt.Errorf("failed to migrate database: %v", err)
+	}
+
+	// Assign the database instance to the global variable
+	db = database
+
+	return nil
+}
+
+func getResumes(c *gin.Context) {
+	var resumes []Resume
+	db.Find(&resumes)
+
+	c.IndentedJSON(http.StatusOK, resumes)
+}
+
+func getResumeByID(c *gin.Context) {
+	var r Resume
+	if err := db.First(&r, c.Param("id")).Error; err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Resumé not found"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, r)
+}
+
+func postResumes(c *gin.Context) {
+	var newResume Resume
+
+	if err := c.BindJSON(&newResume); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	resumeURL := strings.TrimSpace(newResume.URL)
+	if !strings.HasPrefix(resumeURL, "https://") {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid resume URL"})
+		return
+	}
+
+	// Add the new resume to the database
+	if err := db.Create(&newResume).Error; err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to create resume"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusCreated, newResume)
 }

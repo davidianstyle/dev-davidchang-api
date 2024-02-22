@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
   title: David Chang API
+  summary: Programmatic way of interacting with me!
   description: Programmatic way of interacting with me!
-  version: 0.0.1
-  summary: ''
+  version: 0.0.2
   contact:
     name: David Chang
     url: 'https://davidchang.dev'
@@ -19,8 +19,10 @@ paths:
   /resumes:
     get:
       operationId: getResumes
-      summary: ''
+      summary: Get all resumes.
       description: Get all resumes
+      tags:
+        - resumes
       responses:
         '200':
           description: Successful response
@@ -28,10 +30,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResumesResponse'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
       operationId: addResume
-      summary: ''
+      summary: Add a new resume.
       description: Add a new resume
+      tags:
+        - resumes
       requestBody:
         required: true
         content:
@@ -45,10 +55,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResumeResponse'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   '/resumes/{id}':
     get:
       operationId: getResumeById
-      summary: ''
+      summary: Get resume by ID.
+      tags:
+        - resumes
       description: Get resume by ID
       parameters:
         - name: id
@@ -70,6 +88,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Resume:
@@ -104,6 +128,16 @@ components:
       properties:
         message:
           type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
 tags:
   - name: resume
     description: Resume data

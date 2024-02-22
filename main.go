@@ -48,7 +48,7 @@ func main() {
 	router.Run(":8080")
 }
 
-func setupDB() {
+func setupDB() error {
 	connectionString := os.Getenv("DB_CONNECTION_STRING")
 
 	if connectionString == "" {

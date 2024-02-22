@@ -43,6 +43,7 @@ func main() {
 	// API to interact with resumés
 	router.GET("/resumes", getResumes)
 	router.GET("/resumes/:id", getResumeByID)
+	router.PATCH("/resumes/:id", updateResume)
 	router.POST("/resumes", postResumes)
 
 	router.Run(":8080")
@@ -93,6 +94,25 @@ func getResumeByID(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, r)
+}
+
+func updateResumeByID(c *gin.Context) {
+	var existingResume Resume
+	if err := db.First(&existingResume, c.Param("id")).Error; err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Resume not found"})
+		return
+	}
+
+	var updatedResume Resume
+	if err := c.ShouldBindJSON(&updatedResume); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Update the existing resume with the new data
+	db.Model(&existingResume).Updates(updatedResume)
+
+	c.IndentedJSON(http.StatusOK, existingResume)
 }
 
 func postResumes(c *gin.Context) {

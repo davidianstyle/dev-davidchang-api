@@ -9,17 +9,9 @@ RESTful API for interacting with David Chang programmatically
 
 ## API Design (https://api.davidchang.dev)
 >[!NOTE]
->_The `resumes` endpoint retrieves and saves resumes (binary data) from/to object storage_
+>_The `resumes` endpoint retrieves and saves resumes (meta data) from/to a database. Future extension to retrieve/save resumes as binary data from/to object storage_
 ### `/resumes` 
 - GET - Get a list of resumes, returned as JSON
 - POST - Add a new resume from request data sent as JSON
 ### `/resumes:id` 
 - GET - Get a resume by ID, returning resume data as JSON
-
->[!NOTE]
->_The `family-members` endpoint saves and retrieves family member info saved in a relational (?) or document (?) database_
-### `/family-members`
-- GET - Get a list of Chang family members returned as JSON
-- POST - Add a new Chang family member from request data sent as JSON
-### `/family-members:id` 
-- GET - Get a family member by ID, returning family member data as JSON

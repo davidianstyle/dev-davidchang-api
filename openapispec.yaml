@@ -196,7 +196,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  components:
+components:
   schemas:
     Resume:
       type: object

@@ -16,6 +16,32 @@ servers:
   - url: 'https://api.davidchang.dev'
     description: Production
 paths:
+  '/resumes/latest':
+    get:
+      operationId: getLatestResume
+      summary: Get the most recent resumé
+      description: API to get the most recent resumé by year. In case of a tie, returns the most recently modified one.
+      tags:
+        - resumes
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResumeResponse'
+        '404':
+          description: No resumes found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /resumes:
     get:
       operationId: getResumes
@@ -138,33 +164,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  '/resumes/latest':
-    get:
-      operationId: getLatestResume
-      summary: Get the most recent resumé
-      description: API to get the most recent resumé by year. In case of a tie, returns the most recently modified one.
+    delete:
+      operationId: deleteResumeById
+      summary: Delete resumé by ID
+      description: Simple API to delete a single resumé by ID
       tags:
         - resumes
+      parameters:
+        - name: id
+          description: Autoincremented value uniquely identifying the resumé
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResumeResponse'
+                $ref: '#/components/schemas/SuccessResponse'
         '404':
-          description: No resumes found
+          description: Resumé not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-        default:
-          description: Unexpected error
+        '500':
+          description: Failed to delete resumé
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-components:
+                $ref: '#/components/schemas/ErrorResponse'
+  components:
   schemas:
     Resume:
       type: object
@@ -193,6 +225,11 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Resume'
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
     ErrorResponse:
       type: object
       properties:

@@ -53,9 +53,10 @@ func main() {
 	// API to interact with resumés
 	router.GET("/resumes/latest", getLatestResume)
 	router.GET("/resumes", getResumes)
+	router.POST("/resumes", postResumes)
 	router.GET("/resumes/:id", getResumeByID)
 	router.PATCH("/resumes/:id", updateResumeByID)
-	router.POST("/resumes", postResumes)
+	router.DELETE("/resumes/:id", deleteResumeByID)
 
 	router.Run(":8080")
 }
@@ -122,6 +123,29 @@ func getResumes(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, resumes)
 }
 
+func postResumes(c *gin.Context) {
+	var newResume Resume
+
+	if err := c.BindJSON(&newResume); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	resumeURL := strings.TrimSpace(newResume.URL)
+	if !strings.HasPrefix(resumeURL, "https://") {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid resume URL"})
+		return
+	}
+
+	// Add the new resume to the database
+	if err := db.Create(&newResume).Error; err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to create resume"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusCreated, newResume)
+}
+
 func getResumeByID(c *gin.Context) {
 	var r Resume
 	if err := db.First(&r, c.Param("id")).Error; err != nil {
@@ -151,25 +175,18 @@ func updateResumeByID(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, existingResume)
 }
 
-func postResumes(c *gin.Context) {
-	var newResume Resume
-
-	if err := c.BindJSON(&newResume); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+func deleteResumeByID(c *gin.Context) {
+	var r Resume
+	if err := db.First(&r, c.Param("id")).Error; err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Resumé not found"})
 		return
 	}
 
-	resumeURL := strings.TrimSpace(newResume.URL)
-	if !strings.HasPrefix(resumeURL, "https://") {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid resume URL"})
+	// Delete the resume from the database
+	if err := db.Delete(&r).Error; err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete resume"})
 		return
 	}
 
-	// Add the new resume to the database
-	if err := db.Create(&newResume).Error; err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to create resume"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusCreated, newResume)
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "Resumé deleted successfully"})
 }

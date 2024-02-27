@@ -1,13 +1,13 @@
 version: '3'
 
 services:
-  api:
+  app:
     build:
       context: .
     ports:
       - "80:8080"  # Map host's port 80 to container's port 8080
     networks:
-      - api-network
+      - app-network
     depends_on:
       mysql:
         condition: service_healthy
@@ -22,12 +22,12 @@ services:
     ports:
       - "3306:3306"
     networks:
-      - api-network
+      - app-network
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 10s
       retries: 10
 
 networks:
-  api-network:
+  app-network:
     driver: bridge

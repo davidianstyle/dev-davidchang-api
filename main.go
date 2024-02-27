@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -71,19 +72,32 @@ func setupDB() error {
 		connectionString = fmt.Sprintf("%s:%s@unix(/cloudsql/%s)/%s?charset=utf8&parseTime=True&loc=Local",
 			dbUser, dbPassword, dbConnectionName, dbName)
 	}
+
 	// Open a database connection
-	database, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{})
+	var err error
+	for i := 0; i < 10; i++ { // Attempt to connect 10 times with a delay between attempts
+		db, err = gorm.Open(mysql.Open(connectionString), &gorm.Config{
+			// Set the time zone
+			NowFunc: func() time.Time {
+				return time.Now().UTC()
+			},
+		})
+		if err == nil {
+			break
+		}
+
+		log.Printf("Error connecting to the database: %v. Retrying in 5 seconds...", err)
+		time.Sleep(5 * time.Second)
+	}
+
 	if err != nil {
-		return fmt.Errorf("failed to connect to database: %v", err)
+		return fmt.Errorf("failed to connect to the database after multiple attempts: %v", err)
 	}
 
 	// Auto Migrate the resumé model, Resume
-	if err := database.AutoMigrate(&Resume{}); err != nil {
+	if err := db.AutoMigrate(&Resume{}); err != nil {
 		return fmt.Errorf("failed to migrate database: %v", err)
 	}
-
-	// Assign the database instance to the global variable
-	db = database
 
 	return nil
 }

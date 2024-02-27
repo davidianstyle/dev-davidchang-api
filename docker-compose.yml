@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: .
+    ports:
+      - "80:8080"  # Map host's port 80 to container's port 8080
+    networks:
+      - api-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_CONNECTION_STRING: "$DB_USER:$DB_PASSWORD@tcp($DB_CONNECTION_NAME)/$DB_NAME?charset=utf8&parseTime=True&loc=UTC"
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "3306:3306"
+    networks:
+      - api-network
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+
+networks:
+  api-network:
+    driver: bridge

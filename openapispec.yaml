@@ -138,6 +138,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  '/resumes/latest':
+    get:
+      operationId: getLatestResume
+      summary: Get the most recent resumé
+      description: API to get the most recent resumé by year. In case of a tie, returns the most recently modified one.
+      tags:
+        - resumes
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResumeResponse'
+        '404':
+          description: No resumes found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Resume:

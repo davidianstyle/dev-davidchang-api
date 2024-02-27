@@ -51,6 +51,7 @@ func main() {
 	})
 
 	// API to interact with resumés
+	router.GET("/resumes/latest", getLatestResume)
 	router.GET("/resumes", getResumes)
 	router.GET("/resumes/:id", getResumeByID)
 	router.PATCH("/resumes/:id", updateResumeByID)
@@ -100,6 +101,18 @@ func setupDB() error {
 	}
 
 	return nil
+}
+
+func getLatestResume(c *gin.Context) {
+	var latestResume Resume
+
+	// Order by year in descending order and then by the latest modification time
+	if err := db.Order("year desc, updated_at desc").First(&latestResume).Error; err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "No resumes found"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, latestResume)
 }
 
 func getResumes(c *gin.Context) {

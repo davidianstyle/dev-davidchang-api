@@ -5,6 +5,7 @@ RESTful API for interacting with David Chang programmatically
 ### Configure
 `$ cp .env.example .env`
 - Fill out all the details for your local database (replace examples in brackets):
+	- ENVIRONMENT=[development]
 	- MYSQL_PORT=[3306]
 	- DB_USER=[root]
 	- DB_PASSWORD=[password]

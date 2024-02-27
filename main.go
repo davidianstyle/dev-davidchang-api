@@ -23,12 +23,16 @@ type Resume struct {
 }
 
 func init() {
-	// Load environment variables from a file if needed
-	// For simplicity, you can set them directly in your Cloud Run service configuration.
-	// LoadEnvFromFile(".env") // Uncomment this line if you are using a .env file
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	// Check if running in a development environment
+	env := os.Getenv("ENVIRONMENT")
+	if env == "" || strings.ToLower(env) == "development" {
+		// Load environment variables from a file for development
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
+	} else {
+		// In production, environment variables are provided by the deployment platform (ie. Cloud Run)
 	}
 }
 

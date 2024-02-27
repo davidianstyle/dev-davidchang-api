@@ -11,8 +11,6 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-    environment:
-      DB_CONNECTION_STRING: "$DB_USER:$DB_PASSWORD@tcp($DB_CONNECTION_NAME)/$DB_NAME?charset=utf8&parseTime=True&loc=UTC"
 
   mysql:
     image: mysql:latest
@@ -25,7 +23,7 @@ services:
       - app-network
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      timeout: 10s
+      timeout: 5s
       retries: 10
 
 networks:

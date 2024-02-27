@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var db *gorm.DB
@@ -25,6 +26,10 @@ func init() {
 	// Load environment variables from a file if needed
 	// For simplicity, you can set them directly in your Cloud Run service configuration.
 	// LoadEnvFromFile(".env") // Uncomment this line if you are using a .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 }
 
 func main() {

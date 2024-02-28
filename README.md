@@ -1,5 +1,5 @@
-# dev-davidchang-api
-RESTful API for interacting with David Chang programmatically
+# David Chang API
+RESTful API for interacting with me programmatically!
 
 ## Build & run locally (http://localhost:80)
 
@@ -46,9 +46,17 @@ RESTful API for interacting with David Chang programmatically
 
 ## API Design (https://api.davidchang.dev)
 >[!NOTE]
->_The `resumes` endpoint retrieves and saves resumes (meta data) from/to a database. Future extension to retrieve/save resumes as binary data from/to object storage_
+>_The `resumes` endpoint retrieves and saves resumés (meta data) from/to a database. Future extension to retrieve/save resumés as binary data from/to object storage_
+### `/resumes/latest`
+- GET - Get the most recent resumé
 ### `/resumes` 
-- GET - Get a list of resumes, returned as JSON
-- POST - Add a new resume from request data sent as JSON
+- GET - Get all resumés, returned as JSON
+- POST - Add a new resumé from request data sent as JSON
 ### `/resumes:id` 
-- GET - Get a resume by ID, returning resume data as JSON
+- GET - Get a resumé by ID, returning resumé data as JSON
+- PATCH - Update a resumé by ID
+- DELETE - Delete a resumé by ID
+
+## Documentation
+
+Full documentation can be found at https://docs.davidchang.dev

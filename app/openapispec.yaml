@@ -10,8 +10,8 @@ info:
     email: email@davidchang.dev
   termsOfService: 'https://davidchang.dev/'
   license:
-    name: The MIT License
-    url: 'https://opensource.org/license/mit/'
+    name: GNU General Public License version 3
+    url: 'https://opensource.org/license/gpl-3-0'
 servers:
   - url: 'https://api.davidchang.dev'
     description: Production

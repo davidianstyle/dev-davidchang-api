@@ -3,17 +3,20 @@ version: '3'
 services:
   app:
     build:
-      context: .
+      context: ./app
     ports:
       - "80:8080"  # Map host's port 80 to container's port 8080
     networks:
       - app-network
     depends_on:
-      mysql:
+      db:
         condition: service_healthy
+    env_file:
+      - .env
 
-  mysql:
-    image: mysql:latest
+  db:
+    build:
+      context: ./db
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
@@ -25,6 +28,8 @@ services:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 5s
       retries: 10
+    env_file:
+      - .env
 
 networks:
   app-network:

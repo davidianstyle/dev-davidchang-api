@@ -4,16 +4,17 @@ RESTful API for interacting with me programmatically!
 ## Build & run locally (http://localhost:80)
 
 ### Configure, build, and run using `docker compose`
-`$ cp app/.env.example app/.env`
-`$ cp db/.env.example db/.env`
-- Fill out (for both files) all the details for your local database (replace examples in brackets):
+`$ cp .env.example .env`
+- Fill out all the details for your local database (replace examples in brackets):
 	- ENVIRONMENT=[development]
 	- MYSQL_PORT=[3306]
 	- DB_USER=[root]
 	- DB_PASSWORD=[password]
 	- DB_NAME=[local_db]
-	- DB_CONNECTION_NAME=[db:$MYSQL_PORT]
-	- DB_CONNECTION_STRING=$DB_USER:$DB_PASSWORD@tcp($DB_CONNECTION_NAME)/$DB_NAME?charset=utf8&parseTime=True&loc=Local
+	- DB_CONNECTION_NAME=db:$MYSQL_PORT
+	- DB_CONNECTION_STRING="$DB_USER:$DB_PASSWORD@tcp($DB_CONNECTION_NAME)/$DB_NAME?charset=utf8&parseTime=True&loc=Local"
+`$ cp .env app/.env`
+`$ cp .env db/.env`
 - Build
 `$ docker compose build`
 - Run
@@ -29,8 +30,8 @@ RESTful API for interacting with me programmatically!
 	- DB_USER=[root]
 	- DB_PASSWORD=[password]
 	- DB_NAME=[local_db]
-	- DB_CONNECTION_NAME=[localhost:$MYSQL_PORT]
-	- DB_CONNECTION_STRING=$DB_USER:$DB_PASSWORD@tcp($DB_CONNECTION_NAME)/$DB_NAME?charset=utf8&parseTime=True&loc=Local
+	- DB_CONNECTION_NAME=localhost:$MYSQL_PORT
+	- DB_CONNECTION_STRING="$DB_USER:$DB_PASSWORD@tcp($DB_CONNECTION_NAME)/$DB_NAME?charset=utf8&parseTime=True&loc=Local"
 - Populate your local environment
 `$ source .env`
 - Run a local MySQL database

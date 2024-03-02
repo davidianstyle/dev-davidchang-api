@@ -13,6 +13,7 @@ RESTful API for interacting with me programmatically!
 	- DB_NAME=[local_db]
 	- DB_CONNECTION_NAME=db:$MYSQL_PORT
 	- DB_CONNECTION_STRING="$DB_USER:$DB_PASSWORD@tcp($DB_CONNECTION_NAME)/$DB_NAME?charset=utf8&parseTime=True&loc=Local"
+- Propagate environments to application and database
 `$ cp .env app/.env`
 `$ cp .env db/.env`
 - Build
@@ -23,27 +24,40 @@ RESTful API for interacting with me programmatically!
 `$ docker compose down`
 
 ### Configure, build, and run manually
+#### Set up environment
 `$ cp .env.example .env`
 - Fill out all the details for your local database (replace examples in brackets):
 	- ENVIRONMENT=[development]
 	- MYSQL_PORT=[3306]
 	- DB_USER=[root]
 	- DB_PASSWORD=[password]
-	- DB_NAME=[local_db]
-	- DB_CONNECTION_NAME=localhost:$MYSQL_PORT
+	- DB_NAME=[db]
+	- DB_CONNECTION_NAME=db:$MYSQL_PORT
 	- DB_CONNECTION_STRING="$DB_USER:$DB_PASSWORD@tcp($DB_CONNECTION_NAME)/$DB_NAME?charset=utf8&parseTime=True&loc=Local"
+- Propagate environments to application and database
+`$ cp .env app/.env`
+`$ cp .env db/.env`
 - Populate your local environment
 `$ source .env`
-- Run a local MySQL database
-`$ docker run -d -p $MYSQL_PORT:$MYSQL_PORT --name local_mysql -e MYSQL_ROOT_PASSWORD=$DB_PASSWORD mysql:latest`
+#### Create a shared network for your app and db
+`$ docker network create $NETWORK_NAME`
+#### Build & run a local MySQL database
+- Build & run
+`$ cd ./db`
+`$ docker build -t mysql .`
+`$ docker run -d -p $MYSQL_PORT:$MYSQL_PORT --name db --network $NETWORK_NAME -e MYSQL_ROOT_PASSWORD=$DB_PASSWORD mysql`
 - Create local database
-`$ docker exec -it local_mysql mysql -u $DB_USER -p`
+`$ docker exec -it db mysql -u $DB_USER -p$DB_PASSWORD`
 (enter password when prompted $DB_PASSWORD)
-`CREATE DATABASE [$DB_NAME]` (replace [$DB_NAME] with password you set up)
-#### Build
+`CREATE DATABASE [$DB_NAME];` (replace [$DB_NAME] with password you set up)
+#### Build & run app code
+- Build & run
+`$ cd ./app`
 `$ docker build -t dev-davidchang-api .`
-#### Run
-`$ docker run -p 80:8080 -it --rm --name dev-dc-api dev-davidchang-api`
+`$ docker run -p 80:8080 -it --rm --name app --network $NETWORK_NAME dev-davidchang-api`
+- Test
+`$ curl --request GET --url localhost/resumes --header 'accept: application/json'`
+- Ok if you get a 200 response
 
 ## API Design (https://api.davidchang.dev)
 >[!NOTE]

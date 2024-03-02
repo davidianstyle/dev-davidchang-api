@@ -1,3 +1,5 @@
+# app/Dockerfile
+
 FROM golang:latest
 
 WORKDIR /usr/src/app

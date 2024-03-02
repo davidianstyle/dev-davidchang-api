@@ -7,6 +7,7 @@ RESTful API for interacting with me programmatically!
 `$ cp .env.example .env`
 - Fill out all the details for your local database (replace examples in brackets):
 	- ENVIRONMENT=[development]
+	- NETWORK_NAME=[api-bridge]
 	- MYSQL_PORT=[3306]
 	- DB_USER=[root]
 	- DB_PASSWORD=[password]
@@ -31,6 +32,7 @@ RESTful API for interacting with me programmatically!
 `$ cp .env.example .env`
 - Fill out all the details for your local database (replace examples in brackets):
 	- ENVIRONMENT=[development]
+	- NETWORK_NAME=[api-bridge]
 	- MYSQL_PORT=[3306]
 	- DB_USER=[root]
 	- DB_PASSWORD=[password]

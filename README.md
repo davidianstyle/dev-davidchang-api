@@ -10,12 +10,15 @@ RESTful API for interacting with me programmatically!
 	- MYSQL_PORT=[3306]
 	- DB_USER=[root]
 	- DB_PASSWORD=[password]
-	- DB_NAME=[local_db]
+	- DB_NAME=[db]
 	- DB_CONNECTION_NAME=db:$MYSQL_PORT
 	- DB_CONNECTION_STRING="$DB_USER:$DB_PASSWORD@tcp($DB_CONNECTION_NAME)/$DB_NAME?charset=utf8&parseTime=True&loc=Local"
 - Propagate environments to application and database
 `$ cp .env app/.env`
 `$ cp .env db/.env`
+- Generate the db/init.sql file
+`$ cd db`
+`$ ./init.sh`
 - Build
 `$ docker compose build`
 - Run
@@ -44,17 +47,14 @@ RESTful API for interacting with me programmatically!
 #### Build & run a local MySQL database
 - Build & run
 `$ cd ./db`
-`$ docker build -t mysql .`
-`$ docker run -d -p $MYSQL_PORT:$MYSQL_PORT --name db --network $NETWORK_NAME -e MYSQL_ROOT_PASSWORD=$DB_PASSWORD mysql`
-- Create local database
-`$ docker exec -it db mysql -u $DB_USER -p$DB_PASSWORD`
-(enter password when prompted $DB_PASSWORD)
-`CREATE DATABASE [$DB_NAME];` (replace [$DB_NAME] with password you set up)
+`$ ./init.sh`
+`$ docker build -t mysql-image .`
+`$ docker run -d -p $MYSQL_PORT:$MYSQL_PORT --name db --network $NETWORK_NAME -e MYSQL_ROOT_PASSWORD=$DB_PASSWORD -e DB_NAME=$DB_NAME mysql-image`
 #### Build & run app code
 - Build & run
 `$ cd ./app`
-`$ docker build -t dev-davidchang-api .`
-`$ docker run -p 80:8080 -it --rm --name app --network $NETWORK_NAME dev-davidchang-api`
+`$ docker build -t api-image .`
+`$ docker run -p 80:8080 -it --rm --name app --network $NETWORK_NAME api-image`
 - Test
 `$ curl --request GET --url localhost/resumes --header 'accept: application/json'`
 - Ok if you get a 200 response

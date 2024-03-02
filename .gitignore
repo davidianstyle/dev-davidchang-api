@@ -25,3 +25,6 @@ go.work
 
 # Env file
 .env
+
+# db/init.sql file (auto-generated using db/init.sh)
+init.sql

@@ -1,4 +1,4 @@
-# app/Dockerfile
+# api-app/Dockerfile
 
 FROM golang:latest
 

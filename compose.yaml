@@ -1,11 +1,37 @@
 version: '3'
 
 services:
-  app:
+  reverse-proxy:
     build:
-      context: ./app
+      context: ./reverse-proxy
     ports:
-      - "80:8080"  # Map host's port 80 to container's port 8080
+      - "80:80"  # Map host's port 80 to container's port 80
+    networks:
+      - api-bridge
+    depends_on:
+      - api-app
+      - webhook-app
+    env_file:
+      - .env
+  
+  api-app:
+    build:
+      context: ./api-app
+    ports:
+      - "8080:8080"  # Map host's port 8080 to container's port 8080
+    networks:
+      - api-bridge
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  webhook-app:
+    build:
+      context: ./webhook-app
+    ports:
+      - "8000:8000"  # Map host's port 8000 to container's port 8000
     networks:
       - api-bridge
     depends_on:

@@ -28,3 +28,6 @@ go.work
 
 # db/init.sql file (auto-generated using db/init.sh)
 init.sql
+
+# NodeJS packages
+node_modules/

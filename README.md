@@ -110,7 +110,7 @@ REVERSE_PROXY_CONTAINER_PORT="80"		# Must match reverse-proxy/Dockerfile
 ```
 - Propagate environments to application and database
 `$ ./propagate_env.sh`
-#### Create a shared network for your app and db
+#### Create a shared network for your api-app, webhook-app, reverse-proxy and db
 `$ docker network create $NETWORK_NAME`
 #### Build & run a local MySQL database
 - Build & run

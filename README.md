@@ -5,7 +5,7 @@ RESTful API for interacting with me programmatically!
 >[!NOTE]
 >_This approach is the quickest way to get everything up and running. However, services are deployed differently than when deployed into GCP so use this as a quick way to build & test functionality._
 
-### Configure, build, and run everything using `docker compose```
+### Configure, build, and run everything using `docker compose`
 ```
 $ ./init_env.sh
 ```

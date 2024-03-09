@@ -1,0 +1,147 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "David Chang API",
+    "version" : "0.0.3"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "paths" : {
+    "/webhook" : {
+      "get" : {
+        "summary" : "GET request for Node.js service",
+        "operationId" : "getNodeJSData",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response"
+          }
+        },
+        "x-google-backend" : {
+          "$ref" : "#/components/x-google-backend-nodejs"
+        }
+      },
+      "put" : {
+        "summary" : "PUT request for Node.js service",
+        "operationId" : "putNodeJSData",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response"
+          }
+        },
+        "x-google-backend" : {
+          "$ref" : "#/components/x-google-backend-nodejs"
+        }
+      },
+      "post" : {
+        "summary" : "POST request for Go service",
+        "operationId" : "postNodeJSData",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response"
+          }
+        },
+        "x-google-backend" : {
+          "$ref" : "#/components/x-google-backend-nodejs"
+        }
+      },
+      "delete" : {
+        "summary" : "DELETE request for Node.js service",
+        "operationId" : "deleteNodeJSData",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response"
+          }
+        },
+        "x-google-backend" : {
+          "$ref" : "#/components/x-google-backend-nodejs"
+        }
+      },
+      "patch" : {
+        "summary" : "PATCH request for Node.js service",
+        "operationId" : "patchNodeJSData",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response"
+          }
+        },
+        "x-google-backend" : {
+          "$ref" : "#/components/x-google-backend-nodejs"
+        }
+      }
+    },
+    "/{proxy+}" : {
+      "get" : {
+        "summary" : "GET request for Go service",
+        "operationId" : "getGoData",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response"
+          }
+        },
+        "x-google-backend" : {
+          "$ref" : "#/components/x-google-backend-go"
+        }
+      },
+      "put" : {
+        "summary" : "PUT request for Go service",
+        "operationId" : "putGoData",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response"
+          }
+        },
+        "x-google-backend" : {
+          "$ref" : "#/components/x-google-backend-go"
+        }
+      },
+      "post" : {
+        "summary" : "POST request for Go service",
+        "operationId" : "postGoData",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response"
+          }
+        },
+        "x-google-backend" : {
+          "$ref" : "#/components/x-google-backend-go"
+        }
+      },
+      "delete" : {
+        "summary" : "DELETE request for Go service",
+        "operationId" : "deleteGoData",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response"
+          }
+        },
+        "x-google-backend" : {
+          "$ref" : "#/components/x-google-backend-go"
+        }
+      },
+      "patch" : {
+        "summary" : "PATCH request for Go service",
+        "operationId" : "patchGoData",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response"
+          }
+        },
+        "x-google-backend" : {
+          "$ref" : "#/components/x-google-backend-go"
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : { },
+    "x-google-backend-nodejs" : {
+      "backendAddress" : "https://dev-davidchang-api-webhook-oo452quldq-uc.a.run.app",
+      "pathTranslation" : "APPEND_PATH_TO_ADDRESS"
+    },
+    "x-google-backend-go" : {
+      "backendAddress" : "https://dev-davidchang-api-oo452quldq-uc.a.run.app",
+      "pathTranslation" : "APPEND_PATH_TO_ADDRESS"
+    }
+  }
+}

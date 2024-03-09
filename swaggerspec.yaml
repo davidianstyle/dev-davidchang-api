@@ -1,15 +1,8 @@
-openapi: 3.0.0
+swagger: "2.0"
+host: api.davidchang.dev
 info:
   title: David Chang API
   version: 0.0.3
-
-components:
-  x-google-backend-nodejs:
-    backendAddress: https://dev-davidchang-api-webhook-oo452quldq-uc.a.run.app
-    pathTranslation: APPEND_PATH_TO_ADDRESS
-  x-google-backend-go:
-    backendAddress: https://dev-davidchang-api-oo452quldq-uc.a.run.app
-    pathTranslation: APPEND_PATH_TO_ADDRESS
 
 paths:
   "/webhook":
@@ -17,7 +10,8 @@ paths:
       summary: GET request for Node.js service
       operationId: getNodeJSData
       x-google-backend:
-        $ref: '#/components/x-google-backend-nodejs'
+        address: https://dev-davidchang-api-webhook-oo452quldq-uc.a.run.app
+        pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
           description: Successful response
@@ -28,7 +22,8 @@ paths:
       summary: POST request for Go service
       operationId: postNodeJSData
       x-google-backend:
-        $ref: '#/components/x-google-backend-nodejs'
+        address: https://dev-davidchang-api-webhook-oo452quldq-uc.a.run.app
+        pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
           description: Successful response
@@ -39,7 +34,8 @@ paths:
       summary: PUT request for Node.js service
       operationId: putNodeJSData
       x-google-backend:
-        $ref: '#/components/x-google-backend-nodejs'
+        address: https://dev-davidchang-api-webhook-oo452quldq-uc.a.run.app
+        pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
           description: Successful response
@@ -50,7 +46,8 @@ paths:
       summary: DELETE request for Node.js service
       operationId: deleteNodeJSData
       x-google-backend:
-        $ref: '#/components/x-google-backend-nodejs'
+        address: https://dev-davidchang-api-webhook-oo452quldq-uc.a.run.app
+        pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
           description: Successful response
@@ -61,19 +58,21 @@ paths:
       summary: PATCH request for Node.js service
       operationId: patchNodeJSData
       x-google-backend:
-        $ref: '#/components/x-google-backend-nodejs'
+        address: https://dev-davidchang-api-webhook-oo452quldq-uc.a.run.app
+        pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
           description: Successful response
         default:
           description: Default response for PATCH request to Node.js service
 
-  "/{proxy+}":
+  "/{proxy}":
     get:
       summary: GET request for Go service
       operationId: getGoData
       x-google-backend:
-        $ref: '#/components/x-google-backend-go'
+        address: https://dev-davidchang-api-oo452quldq-uc.a.run.app
+        pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
           description: Successful response
@@ -84,7 +83,8 @@ paths:
       summary: POST request for Go service
       operationId: postGoData
       x-google-backend:
-        $ref: '#/components/x-google-backend-go'
+        address: https://dev-davidchang-api-oo452quldq-uc.a.run.app
+        pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
           description: Successful response
@@ -95,7 +95,8 @@ paths:
       summary: PUT request for Go service
       operationId: putGoData
       x-google-backend:
-        $ref: '#/components/x-google-backend-go'
+        address: https://dev-davidchang-api-oo452quldq-uc.a.run.app
+        pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
           description: Successful response
@@ -106,7 +107,8 @@ paths:
       summary: DELETE request for Go service
       operationId: deleteGoData
       x-google-backend:
-        $ref: '#/components/x-google-backend-go'
+        address: https://dev-davidchang-api-oo452quldq-uc.a.run.app
+        pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
           description: Successful response
@@ -117,7 +119,8 @@ paths:
       summary: PATCH request for Go service
       operationId: patchGoData
       x-google-backend:
-        $ref: '#/components/x-google-backend-go'
+        address: https://dev-davidchang-api-oo452quldq-uc.a.run.app
+        pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
           description: Successful response

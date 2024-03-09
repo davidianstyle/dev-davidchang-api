@@ -21,8 +21,8 @@ paths:
       responses:
         "200":
           description: Successful response
-      default:
-        description: Default response for GET request to Node.js service
+        default:
+          description: Default response for GET request to Node.js service
 
     post:
       summary: POST request for Go service
@@ -32,8 +32,8 @@ paths:
       responses:
         "200":
           description: Successful response
-      default:
-        description: Default response for POST request to Go service
+        default:
+          description: Default response for POST request to Go service
 
     put:
       summary: PUT request for Node.js service
@@ -43,8 +43,8 @@ paths:
       responses:
         "200":
           description: Successful response
-      default:
-        description: Default response for PUT request to Node.js service
+        default:
+          description: Default response for PUT request to Node.js service
 
     delete:
       summary: DELETE request for Node.js service
@@ -54,8 +54,8 @@ paths:
       responses:
         "200":
           description: Successful response
-      default:
-        description: Default response for DELETE request to Node.js service
+        default:
+          description: Default response for DELETE request to Node.js service
 
     patch:
       summary: PATCH request for Node.js service
@@ -65,8 +65,8 @@ paths:
       responses:
         "200":
           description: Successful response
-      default:
-        description: Default response for PATCH request to Node.js service
+        default:
+          description: Default response for PATCH request to Node.js service
 
   "/{proxy+}":
     get:
@@ -77,8 +77,8 @@ paths:
       responses:
         "200":
           description: Successful response
-      default:
-        description: Default response for GET request to Go service
+        default:
+          description: Default response for GET request to Go service
 
     post:
       summary: POST request for Go service
@@ -88,8 +88,8 @@ paths:
       responses:
         "200":
           description: Successful response
-      default:
-        description: Default response for POST request to Go service
+        default:
+          description: Default response for POST request to Go service
 
     put:
       summary: PUT request for Go service
@@ -99,8 +99,8 @@ paths:
       responses:
         "200":
           description: Successful response
-      default:
-        description: Default response for PUT request to Go service
+        default:
+          description: Default response for PUT request to Go service
 
     delete:
       summary: DELETE request for Go service
@@ -110,8 +110,8 @@ paths:
       responses:
         "200":
           description: Successful response
-      default:
-        description: Default response for DELETE request to Go service
+        default:
+          description: Default response for DELETE request to Go service
 
     patch:
       summary: PATCH request for Go service
@@ -121,5 +121,5 @@ paths:
       responses:
         "200":
           description: Successful response
-      default:
-        description: Default response for PATCH request to Go service
+        default:
+          description: Default response for PATCH request to Go service

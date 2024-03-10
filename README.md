@@ -205,6 +205,48 @@ $ docker run -p $REVERSE_PROXY_HOST_PORT:$REVERSE_PROXY_CONTAINER_PORT -it --rm 
 
 - Test
 (TODO)
+
+## [Instructions for deploying Cloud Endpoints](https://cloud.google.com/endpoints/docs/openapi/set-up-cloud-run-espv2)
+
+### Deploy sample image to Cloud Run
+```
+$ gcloud run deploy api.davidchang.dev \
+    --image="gcr.io/cloudrun/hello" \
+    --allow-unauthenticated \
+    --platform managed \
+    --project=david-chang-websites
+```
+
+### Configure Swagger 2.0 specification (aka OpenAPI 2.0.0) to define _entire_ API surface
+```
+$ emacs swaggerspec.yaml
+```
+
+### Deploy Cloud Endpoints configuration (take note of `CONFIG_ID` - ie. 2024-03-10r0)
+```
+$ gcloud endpoints services deploy swaggerspec.yaml --project david-chang-websites
+```
+### Build a new ESPv2 image (download and install [`gcloud_build_image`](https://github.com/GoogleCloudPlatform/esp-v2/blob/master/docker/serverless/gcloud_build_image) in `/usr/local/bin` if needed)
+```
+$ gcloud_build_image -s api.davidchang.dev \
+    -c 2024-03-10r0 -p david-chang-websites
+```
+### Deploy the new ESPv2 container
+```
+$ gcloud run deploy api.davidchang.dev \
+  --image="gcr.io/david-chang-websites/endpoints-runtime-serverless:2.47.0-api.davidchang.dev-2024-03-10r0" \
+  --allow-unauthenticated \
+  --platform managed \
+  --project=david-chang-websites
+```
+### Test
+```
+$ export ENDPOINTS_HOST=dev-davidchang-api-cloud-endpoints-oo452quldq-uc.a.run.app
+$ curl --request GET \
+   --header "content-type:application/json" \
+   "https://${ENDPOINTS_HOST}/resumes"
+```
+
 ## API Design (https://api.davidchang.dev)
 >[!NOTE]
 >_The `resumes` endpoint retrieves and saves resumés (meta data) from/to a database. Future extension to retrieve/save resumés as binary data from/to object storage_

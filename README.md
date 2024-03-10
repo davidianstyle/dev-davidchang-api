@@ -210,7 +210,7 @@ $ docker run -p $REVERSE_PROXY_HOST_PORT:$REVERSE_PROXY_CONTAINER_PORT -it --rm 
 
 ### Deploy sample image to Cloud Run
 ```
-gcloud run deploy api.davidchang.dev \
+$ gcloud run deploy api.davidchang.dev \
     --image="gcr.io/cloudrun/hello" \
     --allow-unauthenticated \
     --platform managed \

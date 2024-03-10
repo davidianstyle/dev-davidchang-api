@@ -3,14 +3,29 @@ host: api.davidchang.dev
 info:
   title: David Chang API
   version: 0.0.3
+x-google-backend:
+  address: https://dev-davidchang-api-go-app-oo452quldq-uc.a.run.app
+  pathTranslation: APPEND_PATH_TO_ADDRESS
 
 paths:
+  '/':
+    get:
+      summary: Redirect to https://docs.davidchang.dev
+      operationId: redirectToDocs
+      responses:
+        '301':
+          description: Permanent Redirect
+          headers:
+            Location:
+              type: string
+              format: uri
+              description: Redirect URL
   "/webhook":
     get:
       summary: GET request for Node.js service
       operationId: getNodeJSData
       x-google-backend:
-        address: https://dev-davidchang-api-webhook-oo452quldq-uc.a.run.app
+        address: https://dev-davidchang-api-nodejs-app-oo452quldq-uc.a.run.app
         pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
@@ -22,7 +37,7 @@ paths:
       summary: POST request for Go service
       operationId: postNodeJSData
       x-google-backend:
-        address: https://dev-davidchang-api-webhook-oo452quldq-uc.a.run.app
+        address: https://dev-davidchang-api-nodejs-app-oo452quldq-uc.a.run.app
         pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
@@ -34,7 +49,7 @@ paths:
       summary: PUT request for Node.js service
       operationId: putNodeJSData
       x-google-backend:
-        address: https://dev-davidchang-api-webhook-oo452quldq-uc.a.run.app
+        address: https://dev-davidchang-api-nodejs-app-oo452quldq-uc.a.run.app
         pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
@@ -46,7 +61,7 @@ paths:
       summary: DELETE request for Node.js service
       operationId: deleteNodeJSData
       x-google-backend:
-        address: https://dev-davidchang-api-webhook-oo452quldq-uc.a.run.app
+        address: https://dev-davidchang-api-nodejs-app-oo452quldq-uc.a.run.app
         pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
@@ -58,7 +73,7 @@ paths:
       summary: PATCH request for Node.js service
       operationId: patchNodeJSData
       x-google-backend:
-        address: https://dev-davidchang-api-webhook-oo452quldq-uc.a.run.app
+        address: https://dev-davidchang-api-nodejs-app-oo452quldq-uc.a.run.app
         pathTranslation: APPEND_PATH_TO_ADDRESS
       responses:
         "200":
@@ -66,63 +81,220 @@ paths:
         default:
           description: Default response for PATCH request to Node.js service
 
-  "/{proxy}":
+  '/resumes/latest':
     get:
-      summary: GET request for Go service
-      operationId: getGoData
-      x-google-backend:
-        address: https://dev-davidchang-api-oo452quldq-uc.a.run.app
-        pathTranslation: APPEND_PATH_TO_ADDRESS
+      operationId: getLatestResume
+      summary: Get the most recent resumé
+      description: API to get the most recent resumé by year. In case of a tie, returns the most recently modified one.
+      tags:
+        - resumes
       responses:
-        "200":
-          description: Successful response
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              year:
+                type: integer
+              URL:
+                type: string
+        '404':
+          description: Not Found
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
         default:
-          description: Default response for GET request to Go service
-
+          description: Unexpected Error
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+  '/resumes':
+    get:
+      operationId: getResumes
+      summary: Get all resumés
+      description: Simple API that returns a JSON array of all available resumés
+      tags:
+        - resumes
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                year:
+                  type: integer
+                URL:
+                  type: string
+        default:
+          description: Unexpected Error
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
     post:
-      summary: POST request for Go service
-      operationId: postGoData
-      x-google-backend:
-        address: https://dev-davidchang-api-oo452quldq-uc.a.run.app
-        pathTranslation: APPEND_PATH_TO_ADDRESS
+      operationId: addResume
+      summary: Add new resumé
+      description: Simple API to add a new resumé to the database
+      tags:
+        - resumes
+      parameters: []
       responses:
-        "200":
-          description: Successful response
+        '201':
+          description: Created
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              year:
+                type: integer
+              URL:
+                type: string
         default:
-          description: Default response for POST request to Go service
-
-    put:
-      summary: PUT request for Go service
-      operationId: putGoData
-      x-google-backend:
-        address: https://dev-davidchang-api-oo452quldq-uc.a.run.app
-        pathTranslation: APPEND_PATH_TO_ADDRESS
+          description: Unexpected Error
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+  '/resumes/{id}':
+    get:
+      operationId: getResumeById
+      summary: Get resumé by ID
+      description: Simple API to get a single resumé by ID
+      tags:
+        - resumes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: Autoincremented value uniquely identifying the resumé
       responses:
-        "200":
-          description: Successful response
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              year:
+                type: integer
+              URL:
+                type: string
+        '404':
+          description: Not Found
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
         default:
-          description: Default response for PUT request to Go service
-
-    delete:
-      summary: DELETE request for Go service
-      operationId: deleteGoData
-      x-google-backend:
-        address: https://dev-davidchang-api-oo452quldq-uc.a.run.app
-        pathTranslation: APPEND_PATH_TO_ADDRESS
-      responses:
-        "200":
-          description: Successful response
-        default:
-          description: Default response for DELETE request to Go service
-
+          description: Unexpected Error
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
     patch:
-      summary: PATCH request for Go service
-      operationId: patchGoData
-      x-google-backend:
-        address: https://dev-davidchang-api-oo452quldq-uc.a.run.app
-        pathTranslation: APPEND_PATH_TO_ADDRESS
+      operationId: updateResumeByID
+      summary: Update resumé by ID
+      description: Simple API to update an existing resumé by ID
+      tags:
+        - resumes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: Autoincremented value uniquely identifying the resumé
       responses:
-        "200":
-          description: Successful response
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              year:
+                type: integer
+              URL:
+                type: string
+        '400':
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+        '404':
+          description: Not Found
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
         default:
-          description: Default response for PATCH request to Go service
+          description: Unexpected Error
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+    delete:
+      operationId: deleteResumeById
+      summary: Delete resumé by ID
+      description: Simple API to delete a single resumé by ID
+      tags:
+        - resumes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: Autoincremented value uniquely identifying the resumé
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        '404':
+          description: Not Found
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
